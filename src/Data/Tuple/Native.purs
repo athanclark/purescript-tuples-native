@@ -1,6 +1,7 @@
 module Data.Tuple.Native
-  ( TupleN, T2
-  , t2
+  ( TupleN
+  , T2, T3, T4, T5, T6, T7, T8, T9
+  , t2, t3, t4, t5, t6, t7, t8, t9
   , prj
   , class TupleSize, class ShowNat
   ) where
