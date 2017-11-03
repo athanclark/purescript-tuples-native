@@ -4,23 +4,61 @@ module Data.Tuple.Native
   , t2, t3, t4, t5, t6, t7, t8, t9
   , prj
   , class TupleSize, class ShowNat
+  -- , class Over, over
   ) where
 
 import Prelude (class Show)
 import Data.Typelevel.Num (D0, D1, D2, D3, D4, D5, D6, D7, D8, D9, class Lt, class Nat, toInt)
-import Type.Row (class RowToList, Cons, Nil)
+-- import Data.Argonaut (class EncodeJson, class DecodeJson, encodeJson, decodeJson)
+import Type.Row (class RowToList, class ListToRow, Cons, Nil, kind RowList)
+-- import Data.Symbol (kind Symbol)
+import Unsafe.Coerce (unsafeCoerce)
 
 
 foreign import prjImpl :: forall t a. Int -> TupleN t -> a
 
-prj :: forall t t' n n' a size
-     . TupleSize t size
+prj :: forall t t' t_ n n' a size
+     . RowToList t t_
+    => TupleSize size t_
     => Lt n size
     => ShowNat n n'
     => RowCons n' a t' t
     => Nat n
     => n -> TupleN t -> a
 prj n t = prjImpl (toInt n) t
+
+
+-- foreign import overImpl :: forall t p a b. Int -> (a -> b) -> TupleN t -> TupleN p
+
+
+-- class Nat n <= Over n (a :: Type) (b :: Type) (t :: # Type) (p :: # Type) | n b t -> p a, n a p -> t b
+
+-- instance overNil :: (Nat n, RowToList t Nil, ListToRow Nil p) => Over n a b t p
+-- instance overCons :: ( ShowNat n n'
+--                      , Over n a b ts ps
+--                      , RowToList ts ts'
+--                      , RowToList t (Cons n' a ts')
+--                      , ListToRow ps' ps
+--                      , ListToRow (Cons n' b ps') p
+--                      ) => Over n a b t p
+-- instance overCons' :: ( ShowNat n n'
+--                       , Over n a b ts ps
+--                       , RowToList ts ts'
+--                       , RowToList t (Cons m' a ts')
+--                       , ListToRow ps' ps
+--                       , ListToRow (Cons m' b ps') p
+--                       ) => Over n a b t p
+
+-- over :: forall size n n' a b t t' p
+--       . TupleSize t size
+--      => Lt n size
+--      => RowCons n' a t' t
+--      => ShowNat n n'
+--      => Over n a b t p
+--      => Nat n
+--      => n -> (a -> b) -> TupleN t -> TupleN p
+-- over n f x = overImpl (toInt n) f x
+
 
 
 -- | Represented as a heterogeneous array under the hood
@@ -31,6 +69,7 @@ foreign import showTupleN :: forall t. TupleN t -> String
 -- | Unsafe show instance - expects all entries to have a show instance
 instance showTupleNInst :: Show (TupleN t) where
   show = showTupleN
+
 
 type T2  a b =
   TupleN ("0" :: a, "1" :: b)
@@ -58,24 +97,16 @@ foreign import t7 :: forall a b c d e f g    . a -> b -> c -> d -> e -> f -> g -
 foreign import t8 :: forall a b c d e f g h  . a -> b -> c -> d -> e -> f -> g -> h -> T8 a b c d e f g h
 foreign import t9 :: forall a b c d e f g h i. a -> b -> c -> d -> e -> f -> g -> h -> i -> T9 a b c d e f g h i
 
-class TupleSize (t :: # Type) n | t -> n
+class TupleSize n (t :: RowList) | t -> n
 
-instance tupleSizeT2 :: RowToList t (Cons "0" a (Cons "1" b Nil))
-                     => TupleSize t D2
-instance tupleSizeT3 :: RowToList t (Cons "0" a (Cons "1" b (Cons "2" c Nil)))
-                     => TupleSize t D3
-instance tupleSizeT4 :: RowToList t (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d Nil))))
-                     => TupleSize t D4
-instance tupleSizeT5 :: RowToList t (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e Nil)))))
-                     => TupleSize t D5
-instance tupleSizeT6 :: RowToList t (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e (Cons "5" f Nil))))))
-                     => TupleSize t D6
-instance tupleSizeT7 :: RowToList t (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e (Cons "5" f (Cons "6" g Nil)))))))
-                     => TupleSize t D7
-instance tupleSizeT8 :: RowToList t (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e (Cons "5" f (Cons "6" g (Cons "7" h Nil))))))))
-                     => TupleSize t D8
-instance tupleSizeT9 :: RowToList t (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e (Cons "5" f (Cons "6" g (Cons "7" h (Cons "8" i Nil)))))))))
-                     => TupleSize t D9
+instance tupleSizeT2 :: TupleSize D2 (Cons "0" a (Cons "1" b Nil))
+instance tupleSizeT3 :: TupleSize D3 (Cons "0" a (Cons "1" b (Cons "2" c Nil)))
+instance tupleSizeT4 :: TupleSize D4 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d Nil))))
+instance tupleSizeT5 :: TupleSize D5 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e Nil)))))
+instance tupleSizeT6 :: TupleSize D6 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e (Cons "5" f Nil))))))
+instance tupleSizeT7 :: TupleSize D7 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e (Cons "5" f (Cons "6" g Nil)))))))
+instance tupleSizeT8 :: TupleSize D8 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e (Cons "5" f (Cons "6" g (Cons "7" h Nil))))))))
+instance tupleSizeT9 :: TupleSize D9 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e (Cons "5" f (Cons "6" g (Cons "7" h (Cons "8" i Nil)))))))))
 
 
 
