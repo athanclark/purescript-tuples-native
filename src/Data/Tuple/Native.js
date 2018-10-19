@@ -6,20 +6,6 @@ exports.prjImpl = function projImpl1 (n) {
   };
 };
 
-exports.overImpl = function overImpl1 (n) {
-  return function projImpl2 (f) {
-    return function projImpl3 (t) {
-      return t.map(function fImpl (v,i) {
-        if (i === n) {
-          return f(v);
-        } else {
-          return v;
-        }
-      });
-    };
-  };
-};
-
 exports.showTupleN = function showTupleN (t) {
   return JSON.stringify(t);
 };

@@ -4,60 +4,26 @@ module Data.Tuple.Native
   , t2, t3, t4, t5, t6, t7, t8, t9
   , prj
   , class TupleSize, class ShowNat
-  -- , class Over, over
   ) where
 
 import Prelude (class Show)
 import Data.Typelevel.Num (D0, D1, D2, D3, D4, D5, D6, D7, D8, D9, class Lt, class Nat, toInt)
--- import Data.Argonaut (class EncodeJson, class DecodeJson, encodeJson, decodeJson)
-import Type.Row (class RowToList, class ListToRow, Cons, Nil, kind RowList)
--- import Data.Symbol (kind Symbol)
-import Unsafe.Coerce (unsafeCoerce)
+import Type.Row (class RowToList, Cons, Nil, kind RowList)
+import Prim.Row (class Cons)
 
 
 foreign import prjImpl :: forall t a. Int -> TupleN t -> a
 
+-- | Project a value of index `n` from a `TupleN`, using `Data.TypeLevel.Num.Reps.dN` as Nat values.
 prj :: forall t t' t_ n n' a size
      . RowToList t t_
     => TupleSize size t_
     => Lt n size
     => ShowNat n n'
-    => RowCons n' a t' t
+    => Cons n' a t' t
     => Nat n
     => n -> TupleN t -> a
 prj n t = prjImpl (toInt n) t
-
-
--- foreign import overImpl :: forall t p a b. Int -> (a -> b) -> TupleN t -> TupleN p
-
-
--- class Nat n <= Over n (a :: Type) (b :: Type) (t :: # Type) (p :: # Type) | n b t -> p a, n a p -> t b
-
--- instance overNil :: (Nat n, RowToList t Nil, ListToRow Nil p) => Over n a b t p
--- instance overCons :: ( ShowNat n n'
---                      , Over n a b ts ps
---                      , RowToList ts ts'
---                      , RowToList t (Cons n' a ts')
---                      , ListToRow ps' ps
---                      , ListToRow (Cons n' b ps') p
---                      ) => Over n a b t p
--- instance overCons' :: ( ShowNat n n'
---                       , Over n a b ts ps
---                       , RowToList ts ts'
---                       , RowToList t (Cons m' a ts')
---                       , ListToRow ps' ps
---                       , ListToRow (Cons m' b ps') p
---                       ) => Over n a b t p
-
--- over :: forall size n n' a b t t' p
---       . TupleSize t size
---      => Lt n size
---      => RowCons n' a t' t
---      => ShowNat n n'
---      => Over n a b t p
---      => Nat n
---      => n -> (a -> b) -> TupleN t -> TupleN p
--- over n f x = overImpl (toInt n) f x
 
 
 
