@@ -6,10 +6,6 @@ exports.prjImpl = function projImpl1 (n) {
   };
 };
 
-exports.showTupleN = function showTupleN (t) {
-  return JSON.stringify(t);
-};
-
 exports.t2 = function t21 (a) {
   return function t22 (b) {
     return [a,b];

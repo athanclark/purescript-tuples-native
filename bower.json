@@ -14,7 +14,8 @@
   "dependencies": {
     "purescript-prelude": "^4.1.0",
     "purescript-unsafe-coerce": "^4.0.0",
-    "purescript-typelevel": "^4.0.0"
+    "purescript-typelevel": "^4.0.0",
+    "purescript-generics-rep": "^6.1.0"
   },
   "devDependencies": {
     "purescript-psci-support": "^4.0.0"
