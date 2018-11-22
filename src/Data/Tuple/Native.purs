@@ -1,3 +1,5 @@
+-- | Heterogeneous arrays for foreign function interfaces.
+
 module Data.Tuple.Native
   ( TupleN
   , T2, T3, T4, T5, T6, T7, T8, T9
