@@ -12,10 +12,10 @@
     "type": "git"
   },
   "dependencies": {
-    "purescript-prelude": "^4.1.0",
+    "purescript-prelude": "^4.1.1",
     "purescript-unsafe-coerce": "^4.0.0",
-    "purescript-typelevel": "^4.0.0",
-    "purescript-generics-rep": "^6.1.0"
+    "purescript-typelevel": "git://github.com/athanclark/purescript-typelevel.git#609e8b28e9aa912988085906e0ac5ea5b9b49ca0",
+    "purescript-generics-rep": "^6.1.1"
   },
   "devDependencies": {
     "purescript-psci-support": "^4.0.0"

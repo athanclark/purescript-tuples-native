@@ -1,9 +1,9 @@
 module Test.Main where
 
-import Data.Tuple.Native
-import Data.Typelevel.Num
+import Data.Tuple.Native (T3, prj, t3)
+import Data.Typelevel.Num (d0, d1, d2)
 
-import Prelude
+import Prelude (Unit, discard, ($))
 import Effect (Effect)
 import Effect.Console (logShow)
 

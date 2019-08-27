@@ -13,7 +13,7 @@ import Data.Typelevel.Num
   ( D0, D1, D2, D3, D4, D5, D6, D7, D8, D9, class Lt, class Nat, toInt
   , d0, d1, d2, d3, d4, d5, d6, d7, d8)
 import Data.Generic.Rep (class Generic, Constructor (..), Argument (..), Product (..))
-import Type.Row (Cons, Nil, kind RowList, class ListToRow)
+import Type.RowList (Cons, Nil, kind RowList, class ListToRow)
 import Prim.Row (class Cons)
 
 
