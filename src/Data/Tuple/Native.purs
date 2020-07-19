@@ -4,6 +4,8 @@ module Data.Tuple.Native
   ( TupleN
   , T2, T3, T4, T5, T6, T7, T8, T9
   , t2, t3, t4, t5, t6, t7, t8, t9
+  , xt
+  , xt2, xt3, xt4, xt5, xt6, xt7, xt8, xt9
   , prj
   , class TupleSize, class ShowNat
   ) where
@@ -13,9 +15,39 @@ import Data.Typelevel.Num
   ( D0, D1, D2, D3, D4, D5, D6, D7, D8, D9, class Lt, class Nat, toInt
   , d0, d1, d2, d3, d4, d5, d6, d7, d8)
 import Data.Generic.Rep (class Generic, Constructor (..), Argument (..), Product (..))
+import Data.Tuple as DT
+import Data.Tuple.Nested as DTN
 import Type.RowList (Cons, Nil, kind RowList, class ListToRow)
 import Prim.Row (class Cons)
 
+-- | Safely coerce a `TupleN` pair into a PureScript Tuple
+xt :: forall a b. T2 a b -> DT.Tuple a b
+xt t = DT.Tuple (prj d0 t) (prj d1 t)
+
+-- | Safely coerce a `TupleN` pair into a PureScript Nested Tuple
+xt2 :: forall a b. T2 a b -> DTN.Tuple2 a b
+xt2 t = DTN.tuple2 (prj d0 t) (prj d1 t)
+
+xt3 :: forall a b c. T3 a b c -> DTN.Tuple3 a b c
+xt3 t = DTN.tuple3 (prj d0 t) (prj d1 t) (prj d2 t)
+
+xt4 :: forall a b c d. T4 a b c d -> DTN.Tuple4 a b c d
+xt4 t = DTN.tuple4 (prj d0 t) (prj d1 t) (prj d2 t) (prj d3 t)
+
+xt5 :: forall a b c d e. T5 a b c d e -> DTN.Tuple5 a b c d e
+xt5 t = DTN.tuple5 (prj d0 t) (prj d1 t) (prj d2 t) (prj d3 t) (prj d4 t)
+
+xt6 :: forall a b c d e f. T6 a b c d e f -> DTN.Tuple6 a b c d e f
+xt6 t = DTN.tuple6 (prj d0 t) (prj d1 t) (prj d2 t) (prj d3 t) (prj d4 t) (prj d5 t)
+
+xt7 :: forall a b c d e f g. T7 a b c d e f g -> DTN.Tuple7 a b c d e f g
+xt7 t = DTN.tuple7 (prj d0 t) (prj d1 t) (prj d2 t) (prj d3 t) (prj d4 t) (prj d5 t) (prj d6 t)
+
+xt8 :: forall a b c d e f g h. T8 a b c d e f g h -> DTN.Tuple8 a b c d e f g h
+xt8 t = DTN.tuple8 (prj d0 t) (prj d1 t) (prj d2 t) (prj d3 t) (prj d4 t) (prj d5 t) (prj d6 t) (prj d7 t)
+
+xt9 :: forall a b c d e f g h i. T9 a b c d e f g h i -> DTN.Tuple9 a b c d e f g h i
+xt9 t = DTN.tuple9 (prj d0 t) (prj d1 t) (prj d2 t) (prj d3 t) (prj d4 t) (prj d5 t) (prj d6 t) (prj d7 t) (prj d8 t)
 
 foreign import prjImpl :: forall t a. Int -> TupleN t -> a
 
