@@ -4,21 +4,21 @@ module Data.Tuple.Native
   ( TupleN
   , T2, T3, T4, T5, T6, T7, T8, T9
   , t2, t3, t4, t5, t6, t7, t8, t9
+  , t2_, t3_, t4_, t5_, t6_, t7_, t8_, t9_
   , xt
   , xt2, xt3, xt4, xt5, xt6, xt7, xt8, xt9
   , prj
   , class TupleSize, class ShowNat
   ) where
 
-import Prelude (($))
-import Data.Typelevel.Num
-  ( D0, D1, D2, D3, D4, D5, D6, D7, D8, D9, class Lt, class Nat, toInt
-  , d0, d1, d2, d3, d4, d5, d6, d7, d8)
-import Data.Generic.Rep (class Generic, Constructor (..), Argument (..), Product (..))
+import Data.Function.Uncurried (Fn2, Fn3, Fn4, Fn5, Fn6, Fn7, Fn8, Fn9, runFn2, runFn3, runFn4, runFn5, runFn6, runFn7, runFn8, runFn9)
+import Data.Generic.Rep (class Generic, Constructor(..), Argument(..), Product(..))
 import Data.Tuple as DT
 import Data.Tuple.Nested as DTN
-import Type.RowList (Cons, Nil, kind RowList, class ListToRow)
+import Data.Typelevel.Num (D0, D1, D2, D3, D4, D5, D6, D7, D8, D9, class Lt, class Nat, toInt, d0, d1, d2, d3, d4, d5, d6, d7, d8)
+import Prelude (($))
 import Prim.Row (class Cons)
+import Type.RowList (Cons, Nil, kind RowList, class ListToRow)
 
 -- | Safely coerce a `TupleN` pair into a PureScript Tuple
 xt :: forall a b. T2 a b -> DT.Tuple a b
@@ -49,7 +49,7 @@ xt8 t = DTN.tuple8 (prj d0 t) (prj d1 t) (prj d2 t) (prj d3 t) (prj d4 t) (prj d
 xt9 :: forall a b c d e f g h i. T9 a b c d e f g h i -> DTN.Tuple9 a b c d e f g h i
 xt9 t = DTN.tuple9 (prj d0 t) (prj d1 t) (prj d2 t) (prj d3 t) (prj d4 t) (prj d5 t) (prj d6 t) (prj d7 t) (prj d8 t)
 
-foreign import prjImpl :: forall t a. Int -> TupleN t -> a
+foreign import prjImpl :: forall t a. Fn2 Int (TupleN t) a
 
 -- | Project a value of index `n` from a `TupleN`, using `Data.TypeLevel.Num.Reps.dN` as Nat values.
 prj :: forall t t' t'' n n' a size
@@ -60,7 +60,7 @@ prj :: forall t t' t'' n n' a size
     => Cons n' a t'' t'
     => Nat n
     => n -> TupleN t -> a
-prj n t = prjImpl (toInt n) t
+prj n t = runFn2 prjImpl (toInt n) t
 
 
 
@@ -85,14 +85,32 @@ type T8  a b c d e f g h =
 type T9  a b c d e f g h i =
   TupleN (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e (Cons "5" f (Cons "6" g (Cons "7" h (Cons "8" i Nil)))))))))
 
-foreign import t2 :: forall a b              . a -> b -> T2 a b
-foreign import t3 :: forall a b c            . a -> b -> c -> T3 a b c
-foreign import t4 :: forall a b c d          . a -> b -> c -> d -> T4 a b c d
-foreign import t5 :: forall a b c d e        . a -> b -> c -> d -> e -> T5 a b c d e
-foreign import t6 :: forall a b c d e f      . a -> b -> c -> d -> e -> f -> T6 a b c d e f
-foreign import t7 :: forall a b c d e f g    . a -> b -> c -> d -> e -> f -> g -> T7 a b c d e f g
-foreign import t8 :: forall a b c d e f g h  . a -> b -> c -> d -> e -> f -> g -> h -> T8 a b c d e f g h
-foreign import t9 :: forall a b c d e f g h i. a -> b -> c -> d -> e -> f -> g -> h -> i -> T9 a b c d e f g h i
+
+t2 :: forall a b              . a -> b -> T2 a b
+t2 = runFn2 t2_
+t3 :: forall a b c            . a -> b -> c -> (T3 a b c)
+t3 = runFn3 t3_
+t4 :: forall a b c d          . a -> b -> c -> d -> (T4 a b c d)
+t4 = runFn4 t4_
+t5 :: forall a b c d e        . a -> b -> c -> d -> e -> (T5 a b c d e)
+t5 = runFn5 t5_
+t6 :: forall a b c d e f      . a -> b -> c -> d -> e -> f -> (T6 a b c d e f)
+t6 = runFn6 t6_
+t7 :: forall a b c d e f g    . a -> b -> c -> d -> e -> f -> g -> (T7 a b c d e f g)
+t7 = runFn7 t7_
+t8 :: forall a b c d e f g h  . a -> b -> c -> d -> e -> f -> g -> h -> (T8 a b c d e f g h)
+t8 = runFn8 t8_
+t9 :: forall a b c d e f g h i. a -> b -> c -> d -> e -> f -> g -> h -> i -> (T9 a b c d e f g h i)
+t9 = runFn9 t9_
+
+foreign import t2_ :: forall a b              . Fn2 a b (T2 a b)
+foreign import t3_ :: forall a b c            . Fn3 a b c (T3 a b c)
+foreign import t4_ :: forall a b c d          . Fn4 a b c d (T4 a b c d)
+foreign import t5_ :: forall a b c d e        . Fn5 a b c d e (T5 a b c d e)
+foreign import t6_ :: forall a b c d e f      . Fn6 a b c d e f (T6 a b c d e f)
+foreign import t7_ :: forall a b c d e f g    . Fn7 a b c d e f g (T7 a b c d e f g)
+foreign import t8_ :: forall a b c d e f g h  . Fn8 a b c d e f g h (T8 a b c d e f g h)
+foreign import t9_ :: forall a b c d e f g h i. Fn9 a b c d e f g h i (T9 a b c d e f g h i)
 
 class TupleSize n (t :: RowList) | t -> n
 
@@ -109,13 +127,13 @@ instance tupleSizeT9 :: TupleSize D9 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "
 instance genericTuple2 :: Generic
          (TupleN (Cons "0" a (Cons "1" b Nil)))
          (Constructor "t2" (Product (Argument a) (Argument b))) where
-  to (Constructor (Product (Argument a) (Argument b))) = t2 a b
+  to (Constructor (Product (Argument a) (Argument b))) = runFn2 t2_ a b
   from xs = Constructor (Product (Argument (prj d0 xs)) (Argument (prj d1 xs)))
 
 instance genericTuple3 :: Generic
          (TupleN (Cons "0" a (Cons "1" b (Cons "2" c Nil))))
          (Constructor "t3" (Product (Argument a) (Product (Argument b) (Argument c)))) where
-  to (Constructor (Product (Argument a) (Product (Argument b) (Argument c)))) = t3 a b c
+  to (Constructor (Product (Argument a) (Product (Argument b) (Argument c)))) = runFn3 t3_ a b c
   from xs = Constructor $ Product (Argument (prj d0 xs)) $ Product (Argument (prj d1 xs)) (Argument (prj d2 xs))
 
 instance genericTuple4 :: Generic
@@ -130,7 +148,7 @@ instance genericTuple4 :: Generic
   to (Constructor (Product (Argument a)
                   (Product (Argument b)
                   (Product (Argument c)
-                           (Argument d))))) = t4 a b c d
+                           (Argument d))))) = runFn4 t4_ a b c d
   from xs = Constructor $ Product (Argument (prj d0 xs))
                         $ Product (Argument (prj d1 xs))
                         $ Product (Argument (prj d2 xs))
@@ -151,7 +169,7 @@ instance genericTuple5 :: Generic
                   (Product (Argument b)
                   (Product (Argument c)
                   (Product (Argument d)
-                           (Argument e)))))) = t5 a b c d e
+                           (Argument e)))))) = runFn5 t5_ a b c d e
   from xs = Constructor $ Product (Argument (prj d0 xs))
                         $ Product (Argument (prj d1 xs))
                         $ Product (Argument (prj d2 xs))
@@ -176,7 +194,7 @@ instance genericTuple6 :: Generic
                   (Product (Argument c)
                   (Product (Argument d)
                   (Product (Argument e)
-                           (Argument f))))))) = t6 a b c d e f
+                           (Argument f))))))) = runFn6 t6_ a b c d e f
   from xs = Constructor $ Product (Argument (prj d0 xs))
                         $ Product (Argument (prj d1 xs))
                         $ Product (Argument (prj d2 xs))
@@ -205,7 +223,7 @@ instance genericTuple7 :: Generic
                   (Product (Argument d)
                   (Product (Argument e)
                   (Product (Argument f)
-                           (Argument g)))))))) = t7 a b c d e f g
+                           (Argument g)))))))) = runFn7 t7_ a b c d e f g
   from xs = Constructor $ Product (Argument (prj d0 xs))
                         $ Product (Argument (prj d1 xs))
                         $ Product (Argument (prj d2 xs))
@@ -238,7 +256,7 @@ instance genericTuple8 :: Generic
                   (Product (Argument e)
                   (Product (Argument f)
                   (Product (Argument g)
-                           (Argument h))))))))) = t8 a b c d e f g h
+                           (Argument h))))))))) = runFn8 t8_ a b c d e f g h
   from xs = Constructor $ Product (Argument (prj d0 xs))
                         $ Product (Argument (prj d1 xs))
                         $ Product (Argument (prj d2 xs))
@@ -275,7 +293,7 @@ instance genericTuple9 :: Generic
                   (Product (Argument f)
                   (Product (Argument g)
                   (Product (Argument h)
-                           (Argument i)))))))))) = t9 a b c d e f g h i
+                           (Argument i)))))))))) = runFn9 t9_ a b c d e f g h i
   from xs = Constructor $ Product (Argument (prj d0 xs))
                         $ Product (Argument (prj d1 xs))
                         $ Product (Argument (prj d2 xs))

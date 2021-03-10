@@ -9,6 +9,7 @@ You can edit this file as you like.
   , "psci-support"
   , "typelevel"
   , "unsafe-coerce"
+  , "functions"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]

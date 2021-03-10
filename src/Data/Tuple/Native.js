@@ -1,111 +1,37 @@
 'use strict';
 
-exports.prjImpl = function projImpl1 (n) {
-  return function projImpl2 (t) {
-    return t[n];
-  };
+exports.prjImpl = function projImpl1 (n, t) {
+  return t[n];
 };
 
-exports.t2 = function t21 (a) {
-  return function t22 (b) {
-    return [a,b];
-  };
+exports.t2_ = function t21 (a, b) {
+  return [a,b];
 };
 
-exports.t3 = function t31 (a) {
-  return function t32 (b) {
-    return function t33 (c) {
-      return [a,b,c];
-    };
-  };
+exports.t3_ = function t31 (a,b,c) {
+  return [a,b,c];
 };
 
-exports.t4 = function t41 (a) {
-  return function t42 (b) {
-    return function t43 (c) {
-      return function t44 (d) {
-        return [a,b,c,d];
-      };
-    };
-  };
+exports.t4_ = function t41 (a,b,c,d) {
+  return [a,b,c,d];
 };
 
-exports.t5 = function t51 (a) {
-  return function t52 (b) {
-    return function t53 (c) {
-      return function t54 (d) {
-        return function t55 (e) {
-          return [a,b,c,d,e];
-        };
-      };
-    };
-  };
+exports.t5_ = function t51 (a,b,c,d,e) {
+  return [a,b,c,d,e];
 };
 
-exports.t6 = function t61 (a) {
-  return function t62 (b) {
-    return function t63 (c) {
-      return function t64 (d) {
-        return function t65 (e) {
-          return function t66 (f) {
-            return [a,b,c,d,e,f];
-          };
-        };
-      };
-    };
-  };
+exports.t6_ = function t61 (a,b,c,d,e,f) {
+  return [a,b,c,d,e,f];
 };
 
-exports.t7 = function t71 (a) {
-  return function t72 (b) {
-    return function t73 (c) {
-      return function t74 (d) {
-        return function t75 (e) {
-          return function t76 (f) {
-            return function t77 (g) {
-              return [a,b,c,d,e,f,g];
-            };
-          };
-        };
-      };
-    };
-  };
+exports.t7_ = function t71 (a,b,c,d,e,f,g) {
+  return [a,b,c,d,e,f,g];
 };
 
-exports.t8 = function t81 (a) {
-  return function t82 (b) {
-    return function t83 (c) {
-      return function t84 (d) {
-        return function t85 (e) {
-          return function t86 (f) {
-            return function t87 (g) {
-              return function t88 (h) {
-                return [a,b,c,d,e,f,g,h];
-              };
-            };
-          };
-        };
-      };
-    };
-  };
+exports.t8_ = function t81 (a,b,c,d,e,f,g,h) {
+  return [a,b,c,d,e,f,g,h];
 };
 
-exports.t9 = function t91 (a) {
-  return function t92 (b) {
-    return function t93 (c) {
-      return function t94 (d) {
-        return function t95 (e) {
-          return function t96 (f) {
-            return function t97 (g) {
-              return function t98 (h) {
-                return function t99 (i) {
-                  return [a,b,c,d,e,f,g,h,i];
-                };
-              };
-            };
-          };
-        };
-      };
-    };
-  };
+exports.t9_ = function t91 (a,b,c,d,e,f,g,h,i) {
+  return [a,b,c,d,e,f,g,h,i];
 };
