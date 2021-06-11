@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "purescript": "0.14.1"
+  }
+}
