@@ -4,12 +4,14 @@ You can edit this file as you like.
 -}
 { name = "tuples-native"
 , dependencies =
-  [ "generics-rep"
+  [ "console"
+  , "effect"
+  , "functions"
   , "prelude"
   , "psci-support"
+  , "tuples"
   , "typelevel"
-  , "unsafe-coerce"
-  , "functions"
+  , "typelevel-prelude"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]
