@@ -18,7 +18,7 @@ import Data.Tuple.Nested as DTN
 import Data.Typelevel.Num (D0, D1, D2, D3, D4, D5, D6, D7, D8, D9, class Lt, class Nat, toInt, d0, d1, d2, d3, d4, d5, d6, d7, d8)
 import Prelude (($))
 import Prim.Row (class Cons)
-import Type.RowList (Cons, Nil, kind RowList, class ListToRow)
+import Type.RowList (Cons, Nil, RowList, class ListToRow)
 
 -- | Safely coerce a `TupleN` pair into a PureScript Tuple
 xt :: forall a b. T2 a b -> DT.Tuple a b
@@ -62,11 +62,8 @@ prj :: forall t t' t'' n n' a size
     => n -> TupleN t -> a
 prj n t = runFn2 prjImpl (toInt n) t
 
-
-
 -- | Represented as a heterogeneous array under the hood
-foreign import data TupleN :: RowList -> Type
-
+foreign import data TupleN :: RowList Type -> Type
 
 type T2  a b =
   TupleN (Cons "0" a (Cons "1" b Nil))
@@ -112,31 +109,32 @@ foreign import t7_ :: forall a b c d e f g    . Fn7 a b c d e f g (T7 a b c d e 
 foreign import t8_ :: forall a b c d e f g h  . Fn8 a b c d e f g h (T8 a b c d e f g h)
 foreign import t9_ :: forall a b c d e f g h i. Fn9 a b c d e f g h i (T9 a b c d e f g h i)
 
-class TupleSize n (t :: RowList) | t -> n
+class TupleSize :: forall k. k -> RowList Type -> Constraint
+class TupleSize n (t :: RowList Type) | t -> n
 
-instance tupleSizeT2 :: TupleSize D2 (Cons "0" a (Cons "1" b Nil))
-instance tupleSizeT3 :: TupleSize D3 (Cons "0" a (Cons "1" b (Cons "2" c Nil)))
-instance tupleSizeT4 :: TupleSize D4 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d Nil))))
-instance tupleSizeT5 :: TupleSize D5 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e Nil)))))
-instance tupleSizeT6 :: TupleSize D6 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e (Cons "5" f Nil))))))
-instance tupleSizeT7 :: TupleSize D7 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e (Cons "5" f (Cons "6" g Nil)))))))
-instance tupleSizeT8 :: TupleSize D8 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e (Cons "5" f (Cons "6" g (Cons "7" h Nil))))))))
-instance tupleSizeT9 :: TupleSize D9 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e (Cons "5" f (Cons "6" g (Cons "7" h (Cons "8" i Nil)))))))))
+instance TupleSize D2 (Cons "0" a (Cons "1" b Nil))
+instance TupleSize D3 (Cons "0" a (Cons "1" b (Cons "2" c Nil)))
+instance TupleSize D4 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d Nil))))
+instance TupleSize D5 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e Nil)))))
+instance TupleSize D6 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e (Cons "5" f Nil))))))
+instance TupleSize D7 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e (Cons "5" f (Cons "6" g Nil)))))))
+instance TupleSize D8 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e (Cons "5" f (Cons "6" g (Cons "7" h Nil))))))))
+instance TupleSize D9 (Cons "0" a (Cons "1" b (Cons "2" c (Cons "3" d (Cons "4" e (Cons "5" f (Cons "6" g (Cons "7" h (Cons "8" i Nil)))))))))
 
 
-instance genericTuple2 :: Generic
+instance Generic
          (TupleN (Cons "0" a (Cons "1" b Nil)))
          (Constructor "t2" (Product (Argument a) (Argument b))) where
   to (Constructor (Product (Argument a) (Argument b))) = runFn2 t2_ a b
   from xs = Constructor (Product (Argument (prj d0 xs)) (Argument (prj d1 xs)))
 
-instance genericTuple3 :: Generic
+instance Generic
          (TupleN (Cons "0" a (Cons "1" b (Cons "2" c Nil))))
          (Constructor "t3" (Product (Argument a) (Product (Argument b) (Argument c)))) where
   to (Constructor (Product (Argument a) (Product (Argument b) (Argument c)))) = runFn3 t3_ a b c
   from xs = Constructor $ Product (Argument (prj d0 xs)) $ Product (Argument (prj d1 xs)) (Argument (prj d2 xs))
 
-instance genericTuple4 :: Generic
+instance Generic
          (TupleN (Cons "0" a
                  (Cons "1" b
                  (Cons "2" c
@@ -154,7 +152,7 @@ instance genericTuple4 :: Generic
                         $ Product (Argument (prj d2 xs))
                                   (Argument (prj d3 xs))
 
-instance genericTuple5 :: Generic
+instance Generic
          (TupleN (Cons "0" a
                  (Cons "1" b
                  (Cons "2" c
@@ -176,7 +174,7 @@ instance genericTuple5 :: Generic
                         $ Product (Argument (prj d3 xs))
                                   (Argument (prj d4 xs))
 
-instance genericTuple6 :: Generic
+instance Generic
          (TupleN (Cons "0" a
                  (Cons "1" b
                  (Cons "2" c
@@ -202,7 +200,7 @@ instance genericTuple6 :: Generic
                         $ Product (Argument (prj d4 xs))
                                   (Argument (prj d5 xs))
 
-instance genericTuple7 :: Generic
+instance Generic
          (TupleN (Cons "0" a
                  (Cons "1" b
                  (Cons "2" c
@@ -232,7 +230,7 @@ instance genericTuple7 :: Generic
                         $ Product (Argument (prj d5 xs))
                                   (Argument (prj d6 xs))
 
-instance genericTuple8 :: Generic
+instance Generic
          (TupleN (Cons "0" a
                  (Cons "1" b
                  (Cons "2" c
@@ -266,7 +264,7 @@ instance genericTuple8 :: Generic
                         $ Product (Argument (prj d6 xs))
                                   (Argument (prj d7 xs))
 
-instance genericTuple9 :: Generic
+instance Generic
          (TupleN (Cons "0" a
                  (Cons "1" b
                  (Cons "2" c
@@ -307,12 +305,12 @@ instance genericTuple9 :: Generic
 
 class ShowNat n (s :: Symbol) | n -> s, s -> n
 
-instance showNatD0 :: ShowNat D0 "0"
-instance showNatD1 :: ShowNat D1 "1"
-instance showNatD2 :: ShowNat D2 "2"
-instance showNatD3 :: ShowNat D3 "3"
-instance showNatD4 :: ShowNat D4 "4"
-instance showNatD5 :: ShowNat D5 "5"
-instance showNatD6 :: ShowNat D6 "6"
-instance showNatD7 :: ShowNat D7 "7"
-instance showNatD8 :: ShowNat D8 "8"
+instance ShowNat D0 "0"
+instance ShowNat D1 "1"
+instance ShowNat D2 "2"
+instance ShowNat D3 "3"
+instance ShowNat D4 "4"
+instance ShowNat D5 "5"
+instance ShowNat D6 "6"
+instance ShowNat D7 "7"
+instance ShowNat D8 "8"
