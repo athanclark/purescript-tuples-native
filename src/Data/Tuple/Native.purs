@@ -18,7 +18,8 @@ import Data.Tuple.Nested as DTN
 import Data.Typelevel.Num (D0, D1, D2, D3, D4, D5, D6, D7, D8, D9, class Lt, class Nat, toInt, d0, d1, d2, d3, d4, d5, d6, d7, d8)
 import Prelude (($))
 import Prim.Row (class Cons)
-import Type.RowList (Cons, Nil, kind RowList, class ListToRow)
+import Prim.RowList (RowList)
+import Type.RowList (Cons, Nil, class ListToRow)
 
 -- | Safely coerce a `TupleN` pair into a PureScript Tuple
 xt :: forall a b. T2 a b -> DT.Tuple a b

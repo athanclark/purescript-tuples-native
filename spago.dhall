@@ -8,7 +8,6 @@ You can edit this file as you like.
   , "effect"
   , "functions"
   , "prelude"
-  , "psci-support"
   , "tuples"
   , "typelevel"
   , "typelevel-prelude"
