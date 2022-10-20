@@ -1,7 +1,5 @@
 "use strict";
 
-function lenTuple (string) {
+export function lenTupleImpl (string) {
     return [string, string.length]
 }
-
-exports.lenTupleImpl = lenTuple

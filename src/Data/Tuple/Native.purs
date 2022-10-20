@@ -18,7 +18,8 @@ import Data.Tuple.Nested as DTN
 import Data.Typelevel.Num (D0, D1, D2, D3, D4, D5, D6, D7, D8, D9, class Lt, class Nat, toInt, d0, d1, d2, d3, d4, d5, d6, d7, d8)
 import Prelude (($))
 import Prim.Row (class Cons)
-import Type.RowList (Cons, Nil, kind RowList, class ListToRow)
+import Prim.RowList (RowList)
+import Type.RowList (Cons, Nil, class ListToRow)
 
 -- | Safely coerce a `TupleN` pair into a PureScript Tuple
 xt :: forall a b. T2 a b -> DT.Tuple a b
@@ -65,7 +66,7 @@ prj n t = runFn2 prjImpl (toInt n) t
 
 
 -- | Represented as a heterogeneous array under the hood
-foreign import data TupleN :: RowList -> Type
+foreign import data TupleN :: RowList Type -> Type
 
 
 type T2  a b =
@@ -112,7 +113,7 @@ foreign import t7_ :: forall a b c d e f g    . Fn7 a b c d e f g (T7 a b c d e 
 foreign import t8_ :: forall a b c d e f g h  . Fn8 a b c d e f g h (T8 a b c d e f g h)
 foreign import t9_ :: forall a b c d e f g h i. Fn9 a b c d e f g h i (T9 a b c d e f g h i)
 
-class TupleSize n (t :: RowList) | t -> n
+class TupleSize n (t :: RowList Type) | t -> n
 
 instance tupleSizeT2 :: TupleSize D2 (Cons "0" a (Cons "1" b Nil))
 instance tupleSizeT3 :: TupleSize D3 (Cons "0" a (Cons "1" b (Cons "2" c Nil)))
